@@ -9,6 +9,13 @@ fn
 #### imports ####
 
 
+
+#### variables ####
+WHITE_MATE_EVAL <- 200
+BLACK_MATE_EVAL <- WHITE_MATE_EVAL*-1
+
+
+
 #### load data ####
 load_data <- function()
 {
@@ -36,7 +43,7 @@ replace_mates_with_extreme_evaluations <- function(df)
     # replace mate eval with extreme val
     for (ix in ix_mate)
     {
-      new_col[ix] <- ifelse(new_col[ix] < 0, -999, 999)
+      new_col[ix] <- ifelse(new_col[ix] < 0, BLACK_MATE_EVAL, WHITE_MATE_EVAL)
     }
     
     # replace in df
@@ -45,7 +52,7 @@ replace_mates_with_extreme_evaluations <- function(df)
   
   
   # out
-  print("Replaced mate evaluations with +999 or -999")
+  print(paste("Replaced mate evaluations with", WHITE_MATE_EVAL, "or", BLACK_MATE_EVAL))
   return(df)
 }
 
@@ -61,6 +68,3 @@ add_worst_eval_for_each_player <- function(df)
   print("Added worst_white_eval and worst_black_eval to df")
   return(df)
 }
-
-with(subset(df, worst_black_eval > 5), table(Result))
-with(subset(df, worst_black_eval == 999), table(Result))
