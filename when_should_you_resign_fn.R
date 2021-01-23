@@ -108,8 +108,8 @@ add_worst_eval_bucket <- function(df, breaks_preset=c(1,2,3))
 # rating buckets
 add_rating_buckets <- function(df)
 {
-  df$BlackElo_bucket <- floor(df$BlackElo/100)
-  df$WhiteElo_bucket <- floor(df$WhiteElo/100)
+  df$BlackElo_bucket <- factor(floor(df$BlackElo/100), ordered=TRUE)
+  df$WhiteElo_bucket <- factor(floor(df$WhiteElo/100), ordered=TRUE)
   print("Added variables WhiteElo_bucket and BlackElo_bucket")
   return(df)
 }
@@ -128,3 +128,21 @@ restrict_by_rating <- function(df, player=c("White", "Black"), min_rating=900, m
 }
 
 # use rating diff aussi! already provided
+# oups ca cest le changement après coté
+
+
+#### plots ####
+get_plot_worst_white_eval_by <- function(df, by=NULL)
+{
+  groups <- list(Worst_Eval=df$worst_white_eval_bucket)
+  if(!is.null(by)) groups[[by]] <- df[,by]
+  t <- aggregate(
+    df$Result,
+    groups,
+    function(x) (.t <- table(x))/sum(.t)
+  )
+  t$White_Wins <- t$x[,"1-0"]
+  if(is.null(by)) ggplot(t, aes_string(x="Worst_Eval", y="White_Wins", group=1)) + geom_line(size=2) + ylim(0,1) # if no time control
+  else ggplot(t, aes_string(x="Worst_Eval", y="White_Wins", group=by, color=by)) + geom_line(aes_string(linetype=NULL), size=2) + ylim(0,1)
+
+}
