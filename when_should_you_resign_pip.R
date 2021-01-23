@@ -7,6 +7,7 @@ pip
 "
 
 df <- load_data(k_games=200)
+df <- remove_abnormal_termination(df)
 df <- restrict_by_rating(df, player = "White", min_rating=900, max_rating=2400)
 df <- add_rating_buckets(df)
 df <- make_time_category_ordered(df)
