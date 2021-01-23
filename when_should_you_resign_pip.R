@@ -9,7 +9,7 @@ pip
 df <- load_data(200)
 df <- make_time_category_ordered(df)
 df <- replace_mates_with_extreme_evaluations(df)
-df <- add_worst_eval_for_each_player(df)
+df <- add_worst_eval_for_each_player(df, eval_after_opponent_move_only=TRUE)
 df <- add_worst_eval_bucket(df, breaks_preset = 1)
 
 

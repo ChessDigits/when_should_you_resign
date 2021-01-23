@@ -67,11 +67,16 @@ replace_mates_with_extreme_evaluations <- function(df)
 
 #### worst evals ####
 # add worst eval for each player
-add_worst_eval_for_each_player <- function(df)
+add_worst_eval_for_each_player <- function(df, eval_after_opponent_move_only=TRUE)
 {
-  eval_cols <- grep(pattern = "Eval_ply_", x=colnames(df), value=TRUE)
-  df$worst_white_eval <- apply(df[eval_cols], 1, min, na.rm=TRUE)
-  df$worst_black_eval <- apply(df[eval_cols], 1, max, na.rm=TRUE)
+  eval_cols_white <- eval_cols_black <- grep(pattern = "Eval_ply_", x=colnames(df), value=TRUE)
+  if (eval_after_opponent_move_only) 
+  {
+    eval_cols_white <- eval_cols_white[seq(2,200,2)] # eval after Black's move
+    eval_cols_black <- eval_cols_black[seq(1,200,2)] # eval after White's move
+  }
+  df$worst_white_eval <- apply(df[eval_cols_white], 1, min, na.rm=TRUE)
+  df$worst_black_eval <- apply(df[eval_cols_black], 1, max, na.rm=TRUE)
   
   # out
   print("Added worst_white_eval and worst_black_eval to df")
