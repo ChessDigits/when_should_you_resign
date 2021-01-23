@@ -84,6 +84,7 @@ add_worst_eval_bucket <- function(df, breaks_preset=c(1,2,3))
   if(breaks_preset==1) breaks <- c(BLACK_MATE_EVAL,0,1,2,3,4,5,6,7,8,9,10,15,20,50,WHITE_MATE_EVAL)
   if(breaks_preset==2) breaks <- c(BLACK_MATE_EVAL,0,1,2,3,4,5,10,50,WHITE_MATE_EVAL)
   if(breaks_preset==3) breaks <- c(BLACK_MATE_EVAL,seq(0,50,1),WHITE_MATE_EVAL)
+  if(breaks_preset==4) breaks <- c(BLACK_MATE_EVAL,0,1,2,3,4,5,6,7,8,9,10,50,WHITE_MATE_EVAL)
   df$worst_black_eval_bucket <- cut(df$worst_black_eval,
                                     breaks=breaks, right=TRUE, ordered=TRUE
   )
