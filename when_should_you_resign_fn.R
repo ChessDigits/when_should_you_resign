@@ -39,6 +39,7 @@ remove_abnormal_termination <- function(df)
   print("Removed abnormal terminations:")
   print(remove)
   print(paste("Total games removed:", n_pre - n_post))
+  return(df)
 }
 
 # make time category ordered
@@ -147,8 +148,9 @@ restrict_by_rating <- function(df, player=c("White", "Black"), min_rating=900, m
 
 
 #### plots ####
-get_plot_worst_white_eval_by <- function(df, by=NULL, exclude_categories=NULL)
+get_plot_worst_white_eval_by <- function(df, by=NULL, exclude_time_forfeits=FALSE, exclude_categories=NULL)
 {
+  if(exclude_time_forfeits) df <- df[df$Termination != "Time forfeit",]
   if(!is.null(exclude_categories)) df <- df[!df$Category %in% exclude_categories,]
   groups <- list(Worst_Eval=df$worst_white_eval_bucket)
   if(!is.null(by)) groups[[by]] <- df[,by]

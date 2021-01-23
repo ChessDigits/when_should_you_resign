@@ -28,9 +28,10 @@ df <- add_worst_eval_bucket(df, breaks_preset = 1)
 
 
 #### plots ####
-get_plot_worst_white_eval_by(df, by=NULL)
-get_plot_worst_white_eval_by(df, by="Category")
-get_plot_worst_white_eval_by(df, by="WhiteElo_bucket", exclude_categories=c("Bullet"))
+exclude_time_forfeits <- TRUE
+get_plot_worst_white_eval_by(df, by=NULL, exclude_time_forfeits=exclude_time_forfeits)
+get_plot_worst_white_eval_by(df, by="Category", exclude_time_forfeits=exclude_time_forfeits)
+get_plot_worst_white_eval_by(df, by="WhiteElo_bucket", exclude_categories=c("Bullet"), exclude_time_forfeits=exclude_time_forfeits)
 
 
 
