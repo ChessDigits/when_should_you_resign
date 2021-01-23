@@ -10,7 +10,7 @@ df <- load_data()
 df <- make_time_category_ordered(df)
 df <- replace_mates_with_extreme_evaluations(df)
 df <- add_worst_eval_for_each_player(df)
-
+df <- add_worst_eval_bucket(df)
 
 
 hist(df$worst_black_eval)
@@ -24,3 +24,4 @@ plot(t)
 ggplot(.df, aes(x=Category, fill=Result))+geom_bar(position = "fill")
 
 # line graph % winning
+
