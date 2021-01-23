@@ -9,6 +9,7 @@ pip
 df <- load_data(k_games=200)
 df <- remove_abnormal_termination(df)
 df <- restrict_by_rating(df, player = "White", min_rating=900, max_rating=2400)
+df <- restrict_by_rating(df, player = "Black", min_rating=900, max_rating=2400)
 df <- add_rating_buckets(df)
 df <- make_time_category_ordered(df)
 df <- replace_mates_with_extreme_evaluations(df)
@@ -28,11 +29,14 @@ df <- add_worst_eval_bucket(df, breaks_preset = 1)
 
 
 #### plots ####
-exclude_time_forfeits <- TRUE
+exclude_time_forfeits <- FALSE
 get_plot_worst_white_eval_by(df, by=NULL, exclude_time_forfeits=exclude_time_forfeits)
 get_plot_worst_white_eval_by(df, by="Category", exclude_time_forfeits=exclude_time_forfeits)
-get_plot_worst_white_eval_by(df, by="WhiteElo_bucket", exclude_categories=c("Bullet"), exclude_time_forfeits=exclude_time_forfeits)
+get_plot_worst_white_eval_by(df, by="WhiteElo_bucket", exclude_categories=c(NULL, "Bullet")[2], exclude_time_forfeits=exclude_time_forfeits)
+get_plot_worst_white_eval_by(df, by="BlackElo_bucket", exclude_categories=c(NULL, "Bullet")[2], exclude_time_forfeits=exclude_time_forfeits)
 
+# for the onion plot, can choose white or black rating bucket; exclude or include bullet; exclude or include time forfeits
+# (can also not exclude black players based on rating)
 
 
 # scatterplot worst evals

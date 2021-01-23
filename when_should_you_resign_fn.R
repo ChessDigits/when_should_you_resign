@@ -32,7 +32,8 @@ remove_abnormal_termination <- function(df)
   n_pre <- nrow(df)
   remove <- c("Abandoned", "Rules infraction")
   df <- df[!df$Termination %in% remove,]
-  df$Termination <- as.factor(df$Termination) # to ensure non-zero levels
+  df$Termination <- factor(df$Termination) # to ensure non-zero levels
+  df$Result <- factor(df$Result) # to ensure non-zero levels
   n_post <- nrow(df)
   
   # out
@@ -161,6 +162,6 @@ get_plot_worst_white_eval_by <- function(df, by=NULL, exclude_time_forfeits=FALS
   )
   t$White_Wins <- t$x[,"1-0"]
   if(is.null(by)) ggplot(t, aes_string(x="Worst_Eval", y="White_Wins", group=1)) + geom_line(size=2) + ylim(0,1) # if no time control
-  else ggplot(t, aes_string(x="Worst_Eval", y="White_Wins", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket")) NULL else by), size=2) + ylim(0,1)
+  else ggplot(t, aes_string(x="Worst_Eval", y="White_Wins", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + ylim(0,1)
 
 }
