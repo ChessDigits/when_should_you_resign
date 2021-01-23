@@ -31,8 +31,12 @@ get_plot_worst_white_eval_by(df, by=NULL)
 get_plot_worst_white_eval_by(df, by="Category")
 get_plot_worst_white_eval_by(df, by="WhiteElo_bucket", exclude_categories=c("Bullet"))
 
+
+
 # scatterplot worst evals
 ggplot(df[sample(x = 1:nrow(df), size = 20000, replace = FALSE),], 
        aes(x=worst_white_eval, y=worst_black_eval)) + geom_point()
 
-
+# confusion matrix
+cm <- yardstick::conf_mat(data=df, truth=worst_white_eval_bucket, estimate=worst_black_eval_bucket)
+autoplot(cm, type="heatmap")
