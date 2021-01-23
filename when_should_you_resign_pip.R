@@ -5,3 +5,5 @@ When should you resign?
 
 pip
 "
+
+df <- load_data()
