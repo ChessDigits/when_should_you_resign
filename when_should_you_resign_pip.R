@@ -6,12 +6,13 @@ When should you resign?
 pip
 "
 
-df <- load_data(200)
+df <- load_data(k_games=200)
+df <- restrict_by_rating(df, player = "White", min_rating=900, max_rating=2400)
+df <- add_rating_buckets(df)
 df <- make_time_category_ordered(df)
 df <- replace_mates_with_extreme_evaluations(df)
 df <- add_worst_eval_for_each_player(df, eval_after_opponent_move_only=TRUE)
 df <- add_worst_eval_bucket(df, breaks_preset = 1)
-
 
 # hist(df$worst_black_eval)
 # hist(df$worst_white_eval)
@@ -58,3 +59,15 @@ ggplot(t, aes(x=Worst_Eval, y=White_Wins, group=Time_Control, color=Time_Control
 # )
 # t$Black_Wins <- t$x[,"0-1"]
 # ggplot(t, aes(x=Worst_Eval, y=Black_Wins, group=1)) + geom_line() + ylim(0,1) # if no time control
+
+
+# avec ratings
+t <- aggregate(
+  df$Result,
+  list(Worst_Eval=df$worst_white_eval_bucket, White_Elo=df$WhiteElo_bucket),
+  function(x) (.t <- table(x))/sum(.t)
+)
+t$White_Wins <- t$x[,"1-0"]
+t$White_Elo <- factor(t$White_Elo, ordered=TRUE)
+ggplot(t, aes(x=Worst_Eval, y=White_Wins, group=White_Elo, color=White_Elo)) + geom_line(#aes(linetype=White_Elo), 
+  size=2) + ylim(0,1)

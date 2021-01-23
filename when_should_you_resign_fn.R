@@ -65,6 +65,7 @@ replace_mates_with_extreme_evaluations <- function(df)
 }
 
 
+
 #### worst evals ####
 # add worst eval for each player
 add_worst_eval_for_each_player <- function(df, eval_after_opponent_move_only=TRUE)
@@ -103,3 +104,27 @@ add_worst_eval_bucket <- function(df, breaks_preset=c(1,2,3))
 }
 
 
+#### ratings ####
+# rating buckets
+add_rating_buckets <- function(df)
+{
+  df$BlackElo_bucket <- floor(df$BlackElo/100)
+  df$WhiteElo_bucket <- floor(df$WhiteElo/100)
+  print("Added variables WhiteElo_bucket and BlackElo_bucket")
+  return(df)
+}
+
+# restrict by rating
+restrict_by_rating <- function(df, player=c("White", "Black"), min_rating=900, max_rating=2400)
+{
+  n_pre <- nrow(df)
+  player <- match.arg(player)
+  df <- df[df[paste0(player, "Elo")] < max_rating & df[paste0(player, "Elo")] >= min_rating,]
+  n_post <- nrow(df)
+  
+  # out
+  print(paste0("Removed games where had Elo >= ", max_rating, " (n pre = ", n_pre, ", n post = ", n_post, ")"))
+  return(df)
+}
+
+# use rating diff aussi! already provided
