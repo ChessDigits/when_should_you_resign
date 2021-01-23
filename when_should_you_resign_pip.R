@@ -29,7 +29,10 @@ df <- add_worst_eval_bucket(df, breaks_preset = 1)
 #### plots ####
 get_plot_worst_white_eval_by(df, by=NULL)
 get_plot_worst_white_eval_by(df, by="Category")
-get_plot_worst_white_eval_by(df, by="WhiteElo_bucket")
+get_plot_worst_white_eval_by(df, by="WhiteElo_bucket", exclude_categories=c("Bullet"))
 
+# scatterplot worst evals
+ggplot(df[sample(x = 1:nrow(df), size = 20000, replace = FALSE),], 
+       aes(x=worst_white_eval, y=worst_black_eval)) + geom_point()
 
 
