@@ -7,3 +7,4 @@ pip
 "
 
 df <- load_data()
+df <- replace_mates_with_extreme_evaluations(df)
