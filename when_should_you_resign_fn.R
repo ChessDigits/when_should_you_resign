@@ -17,9 +17,9 @@ BLACK_MATE_EVAL <- WHITE_MATE_EVAL*-1
 
 
 #### load data ####
-load_data <- function()
+load_data <- function(k_games=c(10,50,100,200))
 {
-  fpath <- "d:/Chess/databases/lichess_May2019/out/10k_blitz_rapid_classical_bullet.csv"
+  fpath <- paste0("d:/Chess/databases/lichess_May2019/out/", k_games, "k_blitz_rapid_classical_bullet.csv")
   df <- read.csv(fpath, stringsAsFactors = T)
   return(df)
 }

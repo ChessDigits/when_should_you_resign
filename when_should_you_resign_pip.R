@@ -6,7 +6,7 @@ When should you resign?
 pip
 "
 
-df <- load_data()
+df <- load_data(50)
 df <- make_time_category_ordered(df)
 df <- replace_mates_with_extreme_evaluations(df)
 df <- add_worst_eval_for_each_player(df)
@@ -24,6 +24,11 @@ plot(t)
 ggplot(.df, aes(x=Category, fill=Result))+geom_bar(position = "fill")
 
 
+
+
+
+
+
 # line graph % winning
 # without time control
 t <- aggregate(
@@ -32,7 +37,7 @@ t <- aggregate(
   function(x) (.t <- table(x))/sum(.t)
 )
 t$White_Wins <- t$x[,"1-0"]
-ggplot(t, aes(x=Worst_Eval, y=White_Wins, group=1)) + geom_line() + ylim(0,1) # if no time control
+ggplot(t, aes(x=Worst_Eval, y=White_Wins, group=1)) + geom_line(size=2) + ylim(0,1) # if no time control
 
 
 # with time control
