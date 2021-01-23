@@ -7,7 +7,7 @@ fn
 "
 
 #### imports ####
-
+library(ggplot2)
 
 
 #### variables ####
@@ -26,6 +26,14 @@ load_data <- function()
 
 
 #### data prep ####
+# make time category ordered
+make_time_category_ordered <- function(df)
+{
+  df$Category <- factor(x = df$Category, levels = c("Bullet", "Blitz", "Rapid", "Classical"), ordered = TRUE)
+  print("Made time category df$Category an ordered factor")
+  return(df)
+}
+
 # replace mates with extreme evaluations
 replace_mates_with_extreme_evaluations <- function(df)
 {
