@@ -6,7 +6,7 @@ When should you resign?
 pip
 "
 
-df <- load_data(k_games=200)
+df <- load_data(k_games=10)
 df <- remove_abnormal_termination(df)
 df <- restrict_by_rating(df, player = "White", min_rating=900, max_rating=2400)
 df <- restrict_by_rating(df, player = "Black", min_rating=900, max_rating=2400)
@@ -42,7 +42,6 @@ get_plot_worst_white_eval_by(df, by="BlackElo_bucket", exclude_categories=c(NULL
 #get_plot_worst_white_eval_by_rating_for_each_time_category(df, by="WhiteElo_bucket", exclude_time_forfeits = exclude_time_forfeits)
 
 
-
 # scatterplot worst evals
 ggplot(df[sample(x = 1:nrow(df), size = 20000, replace = FALSE),], 
        aes(x=worst_white_eval, y=worst_black_eval)) + geom_point()
@@ -50,3 +49,7 @@ ggplot(df[sample(x = 1:nrow(df), size = 20000, replace = FALSE),],
 # confusion matrix
 cm <- yardstick::conf_mat(data=df, truth=worst_white_eval_bucket, estimate=worst_black_eval_bucket)
 autoplot(cm, type="heatmap")
+
+
+#### disadvantage reached in game ####
+df <- add_disadvantage_reached_in_game(df)

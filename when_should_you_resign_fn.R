@@ -132,6 +132,24 @@ add_worst_eval_bucket <- function(df, breaks_preset=c(1,2,3,4))
   return(df)
 }
 
+# 
+add_disadvantage_reached_in_game <- function(df)
+{
+  "
+  need to have run add_worst_eval_for_each_player(df) before
+  "
+  breaks <- get_breaks(1)
+  for (b in breaks)
+  {
+    df[,paste0("black_disadvantage_reached_", b)] <- df$worst_black_eval >= b
+    df[,paste0("white_disadvantage_reached_", b)] <- df$worst_white_eval*-1 >= b
+  }
+  
+  # out
+  print("Added variables white_disadvantage_reached_... and white_disadvantaged_reached_...")
+  return(df)
+}
+
 
 #### ratings ####
 # rating buckets
