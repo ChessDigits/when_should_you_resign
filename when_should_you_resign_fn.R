@@ -217,3 +217,28 @@ get_plot_worst_white_eval_by <- function(df, by=NULL, exclude_time_forfeits=FALS
 #   
 # }
 
+get_plot_disadvantage_reached_by <- function(df, by=NULL, exclude_time_forfeits=FALSE, exclude_categories=NULL)
+{
+  # requested data filtering
+  if(exclude_time_forfeits) df <- df[df$Termination != "Time forfeit",]
+  if(!is.null(exclude_categories)) df <- df[!df$Category %in% exclude_categories,]
+
+  # create df to plot from disadvantage variables
+  dis_cols <- grep(pattern = "white_dis", x = colnames(df), fixed = T, value = T)
+  #dis_props <- apply(df[dis_cols], 2, function(x) sum(x)/length(x)) # props of games that reached the dis
+  prop_winning <- c()
+  for (col in dis_cols)
+  {
+    .df <- df[df[,col]==TRUE,]
+    prop_winning[col] <- sum(.df$Result == "1-0")/nrow(.df)
+  }
+  
+  # into df for plotting
+  dis_df <- data.frame(`Disadvantage_Reached`=factor(get_breaks(1)))
+  dis_df$`Percent_Winning` <- prop_winning*100
+  
+  # plot
+  ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=1)) + 
+    geom_line(size=2) + ylim(0,50)
+}
+
