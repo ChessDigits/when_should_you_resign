@@ -67,3 +67,4 @@ get_plot_disadvantage_reached_by(df, exclude_categories = list(NULL, "Bullet")[[
 get_plot_disadvantage_reached_by(df, by="Category", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 #get_plot_disadvantage_reached_by(df, by="WhiteElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
+get_plot_disadvantage_reached_by(df, results=c("1-0", "1/2-1/2"), by="BlackElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)

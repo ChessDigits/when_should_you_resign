@@ -229,7 +229,7 @@ get_plot_worst_white_eval_by <- function(df, by=NULL, exclude_time_forfeits=FALS
 #   
 # }
 
-get_plot_disadvantage_reached_by <- function(df, by=NULL, exclude_time_forfeits=FALSE, exclude_categories=NULL)
+get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, exclude_time_forfeits=FALSE, exclude_categories=NULL)
 {
   # requested data filtering
   if(exclude_time_forfeits) df <- df[df$Termination != "Time forfeit",]
@@ -247,7 +247,7 @@ get_plot_disadvantage_reached_by <- function(df, by=NULL, exclude_time_forfeits=
   {
     .df <- df[df[,col]==TRUE,]
     groups <- list(.df[,by]); names(groups) <- by
-    prop_winning[[col]] <- aggregate(list(Percent_Winning=.df$Result), groups, function(x) sum(x=="1-0")/length(x))
+    prop_winning[[col]] <- aggregate(list(Percent_Winning=.df$Result), groups, function(x) sum(x %in% results)/length(x))
   }
   
   
