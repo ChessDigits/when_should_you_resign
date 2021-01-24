@@ -8,6 +8,7 @@ pip
 
 df <- load_data(k_games=200)
 df <- remove_abnormal_termination(df)
+df <- remove_results(df, results="1/2-1/2")
 df <- restrict_by_rating(df, player = "White", min_rating=900, max_rating=2400)
 df <- restrict_by_rating(df, player = "Black", min_rating=900, max_rating=2400)
 #df <- restrict_by_rating_differential(df, max_diff=200)

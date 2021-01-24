@@ -43,6 +43,20 @@ remove_abnormal_termination <- function(df)
   return(df)
 }
 
+# remove results
+remove_results <- function(df, results)
+{
+  n_pre <- nrow(df)
+  df <- df[!df$Result %in% results,]
+  df$Result <- factor(df$Result) # to ensure non-zero levels
+  n_post <- nrow(df)
+  # out
+  print("Removed results:")
+  print(results)
+  print(paste("Total games removed:", n_pre - n_post))
+  return(df)
+}
+
 # make time category ordered
 make_time_category_ordered <- function(df)
 {
