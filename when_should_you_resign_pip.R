@@ -6,10 +6,11 @@ When should you resign?
 pip
 "
 
-df <- load_data(k_games=10)
+df <- load_data(k_games=200)
 df <- remove_abnormal_termination(df)
 df <- restrict_by_rating(df, player = "White", min_rating=900, max_rating=2400)
 df <- restrict_by_rating(df, player = "Black", min_rating=900, max_rating=2400)
+#df <- restrict_by_rating_differential(df, max_diff=200)
 df <- add_rating_buckets(df)
 df <- make_time_category_ordered(df)
 df <- replace_mates_with_extreme_evaluations(df)
@@ -28,7 +29,7 @@ df <- add_worst_eval_bucket(df, breaks_preset = 1)
 # 
 
 
-#### plots ####
+#### plots worst eval during game ####
 exclude_time_forfeits <- FALSE
 get_plot_worst_white_eval_by(df, by=NULL, exclude_time_forfeits=exclude_time_forfeits)
 get_plot_worst_white_eval_by(df, by="Category", exclude_time_forfeits=exclude_time_forfeits)
@@ -51,9 +52,13 @@ cm <- yardstick::conf_mat(data=df, truth=worst_white_eval_bucket, estimate=worst
 autoplot(cm, type="heatmap")
 
 
+
+
+
 #### disadvantage reached in game ####
 exclude_time_forfeits <- FALSE
 df <- add_disadvantage_reached_in_game(df)
 get_plot_disadvantage_reached_by(df, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 get_plot_disadvantage_reached_by(df, by="Category", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
+get_plot_disadvantage_reached_by(df, by="WhiteElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)

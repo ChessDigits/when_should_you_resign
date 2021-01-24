@@ -177,6 +177,18 @@ restrict_by_rating <- function(df, player=c("White", "Black"), min_rating=900, m
 # use rating diff aussi! already provided
 # oups ca cest le changement après coté
 
+restrict_by_rating_differential <- function(df, max_diff)
+{
+  n_pre <- nrow(df)
+  diff <- abs(df$WhiteElo - df$BlackElo)
+  df <- df[diff <= max_diff,]
+  n_post <- nrow(df)
+  
+  # out
+  print(paste0("Removed games where players differed by Elo > ", max_diff, " (n pre = ", n_pre, ", n post = ", n_post, ")"))
+  return(df)
+}
+
 
 #### plots ####
 get_plot_worst_white_eval_by <- function(df, by=NULL, exclude_time_forfeits=FALSE, exclude_categories=NULL)
