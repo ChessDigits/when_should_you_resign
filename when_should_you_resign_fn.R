@@ -222,16 +222,22 @@ get_plot_disadvantage_reached_by <- function(df, by=NULL, exclude_time_forfeits=
   # requested data filtering
   if(exclude_time_forfeits) df <- df[df$Termination != "Time forfeit",]
   if(!is.null(exclude_categories)) df <- df[!df$Category %in% exclude_categories,]
-
+  
+  # groups
+  if(is.null(by)) { by <- "All_Games"; df[,by] <- "All Games" }
+  
   # create df to plot from disadvantage variables
+  # this is where we get the numbers to plot
   dis_cols <- grep(pattern = "white_dis", x = colnames(df), fixed = T, value = T)
   #dis_props <- apply(df[dis_cols], 2, function(x) sum(x)/length(x)) # props of games that reached the dis
-  prop_winning <- c()
+  prop_winning <- list()
   for (col in dis_cols)
   {
     .df <- df[df[,col]==TRUE,]
-    prop_winning[col] <- sum(.df$Result == "1-0")/nrow(.df)
+    groups <- list(.df[,by]); names(groups) <- by
+    prop_winning[[col]] <- aggregate(list(Percent_Winning=.df$Result), groups, function(x) sum(x=="1-0")/length(x))
   }
+  
   
   # into df for plotting
   dis_label <- gsub("white_disadvantage_reached_", replacement = "", dis_cols)
@@ -255,11 +261,18 @@ get_plot_disadvantage_reached_by <- function(df, by=NULL, exclude_time_forfeits=
   )
   dis_label <- unlist(dis_label_map)[match(dis_label, names(dis_label_map))]
   dis_label <- stringr::str_wrap(dis_label, width = 10)
-  dis_df <- data.frame(`Disadvantage_Reached`=factor(dis_label, levels=dis_label, ordered=TRUE))
-  dis_df$`Percent_Winning` <- prop_winning*100
+  for (i in 1:length(prop_winning)) prop_winning[[i]]$Disadvantage_Reached <- dis_label[i]
+  prop_winning <- do.call(rbind, prop_winning)
+  dis_df <- data.frame(`Disadvantage_Reached`=factor(prop_winning$Disadvantage_Reached, levels=dis_label, ordered=TRUE))
+  dis_df$`Percent_Winning` <- prop_winning$Percent_Winning*100
+  if(!is.null(by)) dis_df[,by] <- prop_winning[,by]
   
   # plot
-  ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=1)) + 
-    geom_line(size=2) + ylim(0,51)
+  ymax <- 60
+  if(by=="All_Games") ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=1)) + 
+    geom_line(size=2) + ylim(0,ymax)
+  
+  else ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + ylim(0,ymax)
+  
 }
 
