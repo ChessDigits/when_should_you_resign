@@ -32,8 +32,8 @@ df <- add_worst_eval_bucket(df, breaks_preset = 1)
 exclude_time_forfeits <- FALSE
 get_plot_worst_white_eval_by(df, by=NULL, exclude_time_forfeits=exclude_time_forfeits)
 get_plot_worst_white_eval_by(df, by="Category", exclude_time_forfeits=exclude_time_forfeits)
-get_plot_worst_white_eval_by(df, by="WhiteElo_bucket", exclude_categories=c(NULL, "Bullet")[2], exclude_time_forfeits=exclude_time_forfeits)
-get_plot_worst_white_eval_by(df, by="BlackElo_bucket", exclude_categories=c(NULL, "Bullet")[2], exclude_time_forfeits=exclude_time_forfeits)
+get_plot_worst_white_eval_by(df, by="WhiteElo_bucket", exclude_categories=list(NULL, "Bullet")[[2]], exclude_time_forfeits=exclude_time_forfeits)
+get_plot_worst_white_eval_by(df, by="BlackElo_bucket", exclude_categories=list(NULL, "Bullet")[[2]], exclude_time_forfeits=exclude_time_forfeits)
 
 # for the onion plot, can choose white or black rating bucket; exclude or include bullet; exclude or include time forfeits
 # (can also not exclude black players based on rating)
@@ -52,4 +52,6 @@ autoplot(cm, type="heatmap")
 
 
 #### disadvantage reached in game ####
+exclude_time_forfeits <- FALSE
 df <- add_disadvantage_reached_in_game(df)
+get_plot_disadvantage_reached_by(df, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)

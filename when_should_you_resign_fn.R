@@ -234,11 +234,32 @@ get_plot_disadvantage_reached_by <- function(df, by=NULL, exclude_time_forfeits=
   }
   
   # into df for plotting
-  dis_df <- data.frame(`Disadvantage_Reached`=factor(get_breaks(1)))
+  dis_label <- gsub("white_disadvantage_reached_", replacement = "", dis_cols)
+  dis_label_map <- list(
+    `-200`="Game Starts",
+    `0`="Less Than a Pawn",
+    `1`="1 Pawn",
+    `2`="2 Pawns",
+    `3`="A Piece",
+    `4`="4 Pawns",
+    `5`="A Rook",
+    `6`="6 Pawns",
+    `7`="7 Pawns",
+    `8`="8 Pawns",
+    `9`="A Queen",
+    `10`="More Than 10 Pawns",
+    `15`="More Than 15 Pawns",
+    `20`="More Than 20 Pawns",
+    `50`="More Than 50 Pawns",
+    `200`="Mate Possible"
+  )
+  dis_label <- unlist(dis_label_map)[match(dis_label, names(dis_label_map))]
+  dis_label <- stringr::str_wrap(dis_label, width = 10)
+  dis_df <- data.frame(`Disadvantage_Reached`=factor(dis_label, levels=dis_label, ordered=TRUE))
   dis_df$`Percent_Winning` <- prop_winning*100
   
   # plot
   ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=1)) + 
-    geom_line(size=2) + ylim(0,50)
+    geom_line(size=2) + ylim(0,51)
 }
 
