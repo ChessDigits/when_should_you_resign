@@ -59,7 +59,11 @@ replace_mates_with_extreme_evaluations <- function(df)
   {
     # get row numbers at which eval is mate
     ix_mate <- grep(pattern="#", x=df[,c], fixed = T)
-    if (length(ix_mate)==0) next
+    if (length(ix_mate)==0) # no mate
+    {
+      df[,c] <- as.numeric(as.character(df[,c]))
+      next 
+    }
     
     # remove mate sign and make var numeric
     new_col <- gsub(pattern = "#", replacement="", x = df[,c], fixed=T)
