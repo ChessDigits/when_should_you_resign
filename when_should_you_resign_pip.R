@@ -30,6 +30,9 @@ df <- add_worst_eval_bucket(df, breaks_preset = 1)
 
 
 #### plots worst eval during game ####
+#### NOT FOR ARTICLE
+#### this asks the question what are my chances of winning if the max disadvantage in my game is __ 
+#### (instead of ONCE I REACH a disadv of __)
 exclude_time_forfeits <- FALSE
 get_plot_worst_white_eval_by(df, by=NULL, exclude_time_forfeits=exclude_time_forfeits)
 get_plot_worst_white_eval_by(df, by="Category", exclude_time_forfeits=exclude_time_forfeits)
@@ -56,9 +59,11 @@ autoplot(cm, type="heatmap")
 
 
 #### disadvantage reached in game ####
+#### THIS ONE FOR ARTICLE ####
+#### this asks the question what are my chances of winning ONCE I REACH a disadv of __
 exclude_time_forfeits <- FALSE
 df <- add_disadvantage_reached_in_game(df)
 get_plot_disadvantage_reached_by(df, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 get_plot_disadvantage_reached_by(df, by="Category", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
-get_plot_disadvantage_reached_by(df, by="WhiteElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
+#get_plot_disadvantage_reached_by(df, by="WhiteElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)

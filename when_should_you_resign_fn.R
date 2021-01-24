@@ -280,7 +280,7 @@ get_plot_disadvantage_reached_by <- function(df, by=NULL, exclude_time_forfeits=
   if(!is.null(by)) dis_df[,by] <- prop_winning[,by]
   
   # plot
-  ymax <- 60
+  ymax <- 63
   if(by=="All_Games") ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=1)) + 
     geom_line(size=2) + ylim(0,ymax)
   
