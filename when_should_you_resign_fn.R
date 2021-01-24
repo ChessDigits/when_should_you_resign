@@ -17,7 +17,7 @@ BLACK_MATE_EVAL <- WHITE_MATE_EVAL*-1
 
 
 #### load data ####
-load_data <- function(k_games=c(10,50,100,200))
+load_data <- function(k_games=c(10,50,100,200,500))
 {
   fpath <- paste0("d:/Chess/databases/lichess_May2019/out/", k_games, "k_blitz_rapid_classical_bullet.csv")
   df <- read.csv(fpath, stringsAsFactors = T)
@@ -102,7 +102,7 @@ add_worst_eval_for_each_player <- function(df, eval_after_opponent_move_only=TRU
 }
 
 # get worst eval by buckets
-add_worst_eval_bucket <- function(df, breaks_preset=c(1,2,3))
+add_worst_eval_bucket <- function(df, breaks_preset=c(1,2,3,4))
 {
   if(breaks_preset==1) breaks <- c(BLACK_MATE_EVAL,0,1,2,3,4,5,6,7,8,9,10,15,20,50,WHITE_MATE_EVAL)
   if(breaks_preset==2) breaks <- c(BLACK_MATE_EVAL,0,1,2,3,4,5,10,50,WHITE_MATE_EVAL)
@@ -165,3 +165,25 @@ get_plot_worst_white_eval_by <- function(df, by=NULL, exclude_time_forfeits=FALS
   else ggplot(t, aes_string(x="Worst_Eval", y="White_Wins", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + ylim(0,1)
 
 }
+
+# # 
+# get_plot_worst_white_eval_by_rating_for_each_time_category <- function(df, by=NULL, exclude_time_forfeits=FALSE)
+# {
+#   if(exclude_time_forfeits) df <- df[df$Termination != "Time forfeit",]
+#   for (cat in c("Bullet", "Blitz", "Rapid", "Classical"))
+#   {
+#     .df <- df[df$Category == cat,]
+#     groups <- list(Worst_Eval=.df$worst_white_eval_bucket)
+#     groups[[by]] <- .df[,by]
+#     t <- aggregate(
+#       .df$Result,
+#       groups,
+#       function(x) (.t <- table(x))/sum(.t)
+#     )
+#     t$White_Wins <- t$x[,"1-0"]
+#     p <- ggplot(t, aes_string(x="Worst_Eval", y="White_Wins", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + ylim(0,1)
+#     print(p)
+#   }
+#   
+# }
+

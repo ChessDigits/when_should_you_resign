@@ -38,6 +38,10 @@ get_plot_worst_white_eval_by(df, by="BlackElo_bucket", exclude_categories=c(NULL
 # for the onion plot, can choose white or black rating bucket; exclude or include bullet; exclude or include time forfeits
 # (can also not exclude black players based on rating)
 
+# rating separate by time category
+#get_plot_worst_white_eval_by_rating_for_each_time_category(df, by="WhiteElo_bucket", exclude_time_forfeits = exclude_time_forfeits)
+
+
 
 # scatterplot worst evals
 ggplot(df[sample(x = 1:nrow(df), size = 20000, replace = FALSE),], 
