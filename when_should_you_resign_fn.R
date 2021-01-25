@@ -243,7 +243,7 @@ get_plot_worst_white_eval_by <- function(df, by=NULL, exclude_time_forfeits=FALS
 #   
 # }
 
-get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, exclude_time_forfeits=FALSE, exclude_categories=NULL)
+get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, by_label=NULL, exclude_time_forfeits=FALSE, exclude_categories=NULL)
 {
   # requested data filtering
   if(exclude_time_forfeits) df <- df[df$Termination != "Time forfeit",]
@@ -251,6 +251,7 @@ get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, exclude
   
   # groups
   if(is.null(by)) { by <- "All_Games"; df[,by] <- "All Games" }
+  if(is.null(by_label)) by_label <- by
   
   # create df to plot from disadvantage variables
   # this is where we get the numbers to plot
@@ -295,10 +296,15 @@ get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, exclude
   
   # plot
   ymax <- 63
+  labs <- list(
+    x="Disadvantage Reached During Game",
+    y="Odds of Winning (%)"
+  )
   if(by=="All_Games") ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=1)) + 
     geom_line(size=2) + ylim(0,ymax)
   
-  else ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + ylim(0,ymax)
+  else ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + ylim(0,ymax) +
+    labs(color=by_label, x=labs$x, y=labs$y)
   
 }
 
