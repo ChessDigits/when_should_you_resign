@@ -5,7 +5,7 @@ When should you resign?
 
 pip
 "
-
+setcwd()
 df <- load_data(k_games=200)
 df <- remove_abnormal_termination(df)
 df <- remove_results(df, results="1/2-1/2")
@@ -16,7 +16,8 @@ df <- add_rating_buckets(df)
 df <- make_time_category_ordered(df)
 df <- replace_mates_with_extreme_evaluations(df)
 df <- add_worst_eval_for_each_player(df, eval_after_opponent_move_only=TRUE)
-df <- add_worst_eval_bucket(df, breaks_preset = 1)
+breaks_preset <- 1
+df <- add_worst_eval_bucket(df, breaks_preset = breaks_preset)
 
 # hist(df$worst_black_eval)
 # hist(df$worst_white_eval)
@@ -63,13 +64,13 @@ autoplot(cm, type="heatmap")
 #### THIS ONE FOR ARTICLE ####
 #### this asks the question what are my chances of winning ONCE I REACH a disadv of __
 exclude_time_forfeits <- FALSE
-df <- add_disadvantage_reached_in_game(df)
+df <- add_disadvantage_reached_in_game(df, breaks_preset)
 get_plot_disadvantage_reached_by(df, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 get_plot_disadvantage_reached_by(df, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=TRUE)
 get_plot_disadvantage_reached_by(df, by="Category", by_label="Time Control", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 get_plot_disadvantage_reached_by(df, by="Category", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=TRUE)
 #get_plot_disadvantage_reached_by(df, by="WhiteElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
-get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", by_label="Opponent Rating", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
+get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", by_label="Opponent\nRating", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=TRUE)
 
 #

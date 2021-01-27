@@ -16,6 +16,14 @@ BLACK_MATE_EVAL <- WHITE_MATE_EVAL*-1
 
 
 
+#### set wd ####
+setcwd <- function()
+{
+  setwd("d:/google drive/chess digits/articles/when_should_you_resign")
+  print(paste("CWD:", getwd()))
+}
+
+
 #### load data ####
 load_data <- function(k_games=c(10,50,100,200,500))
 {
@@ -121,12 +129,13 @@ add_worst_eval_for_each_player <- function(df, eval_after_opponent_move_only=TRU
 
 
 # helper fn
-get_breaks <- function(breaks_preset=c(1,2,3,4))
+get_breaks <- function(breaks_preset=c(1,2,3,4,5))
 {
   if(breaks_preset==1) breaks <- c(BLACK_MATE_EVAL,0,1,2,3,4,5,6,7,8,9,10,15,20,50,WHITE_MATE_EVAL)
   if(breaks_preset==2) breaks <- c(BLACK_MATE_EVAL,0,1,2,3,4,5,10,50,WHITE_MATE_EVAL)
   if(breaks_preset==3) breaks <- c(BLACK_MATE_EVAL,seq(0,50,1),WHITE_MATE_EVAL)
   if(breaks_preset==4) breaks <- c(BLACK_MATE_EVAL,0,1,2,3,4,5,6,7,8,9,10,50,WHITE_MATE_EVAL)
+  if(breaks_preset==5) breaks <- c(BLACK_MATE_EVAL,0,1,2,3,4,5,6,7,8,9,10,15,20,WHITE_MATE_EVAL)
   return(breaks)
 }
 
@@ -147,12 +156,16 @@ add_worst_eval_bucket <- function(df, breaks_preset=c(1,2,3,4))
 }
 
 # 
-add_disadvantage_reached_in_game <- function(df)
+add_disadvantage_reached_in_game <- function(df, breaks_preset)
 {
   "
   need to have run add_worst_eval_for_each_player(df) before
   "
-  breaks <- get_breaks(1)
+  # remove previous columns if any
+  df <- df[,!grepl("disadvantage_reached", colnames(df))]
+  
+  # add columns
+  breaks <- get_breaks(breaks_preset)
   for (b in breaks)
   {
     df[,paste0("black_disadvantage_reached_", b)] <- df$worst_black_eval >= b
@@ -288,10 +301,11 @@ get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, by_labe
     `7`="7 Pawns",
     `8`="8 Pawns",
     `9`="A Queen",
-    `10`="More Than 10 Pawns",
-    `15`="More Than 15 Pawns",
-    `20`="More Than 20 Pawns",
-    `50`="More Than 50 Pawns",
+    `10`="Over 10 Pawns",
+    `12`="Over 12 Pawns",
+    `15`="Over 15 Pawns",
+    `20`="Over 20 Pawns",
+    `50`="Over 50 Pawns",
     `200`="Mate Possible"
   )
   dis_label <- unlist(dis_label_map)[match(dis_label, names(dis_label_map))]
@@ -312,12 +326,14 @@ get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, by_labe
   if(by=="All_Games") ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=1)) + 
     geom_line(size=2) + #ylim(0,ymax) +
     labs(x=labs$x, y=labs$y) +
-    scale_y_continuous(breaks=yticks, limits=c(0,ymax))
+    scale_y_continuous(breaks=yticks, limits=c(0,ymax)) + 
+    theme(text=element_text(size=15))
   
   else ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + 
     #ylim(0,ymax) +
     labs(color=by_label, linetype=by_label, x=labs$x, y=labs$y) +
-    scale_y_continuous(breaks=yticks, limits=c(0,ymax))
+    scale_y_continuous(breaks=yticks, limits=c(0,ymax)) + 
+    theme(text=element_text(size=15))
   
 }
 
