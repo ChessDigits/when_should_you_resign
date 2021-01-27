@@ -316,7 +316,7 @@ get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, by_labe
   
   else ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + 
     #ylim(0,ymax) +
-    labs(color=by_label, x=labs$x, y=labs$y) +
+    labs(color=by_label, linetype=by_label, x=labs$x, y=labs$y) +
     scale_y_continuous(breaks=yticks, limits=c(0,ymax))
   
 }
