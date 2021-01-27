@@ -169,8 +169,16 @@ add_disadvantage_reached_in_game <- function(df)
 # rating buckets
 add_rating_buckets <- function(df)
 {
-  df$BlackElo_bucket <- factor(floor(df$BlackElo/100), ordered=TRUE)
-  df$WhiteElo_bucket <- factor(floor(df$WhiteElo/100), ordered=TRUE)
+  for (player in c("White", "Black"))
+  {
+    # ordered factor
+    df[,paste0(player, "Elo_bucket")] <- factor(floor(df[,paste0(player, "Elo")]/100), ordered=TRUE)
+    
+    # levels (e.g. 1400 instead of 14)
+    levels(df[,paste0(player, "Elo_bucket")]) <- as.numeric(levels(df[,paste0(player, "Elo_bucket")]))*100
+  }
+
+  # out
   print("Added variables WhiteElo_bucket and BlackElo_bucket")
   return(df)
 }
@@ -295,16 +303,21 @@ get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, by_labe
   if(!is.null(by)) dis_df[,by] <- prop_winning[,by]
   
   # plot
-  ymax <- 63
+  ymax <- 55
   labs <- list(
     x="Disadvantage Reached During Game",
     y="Odds of Winning (%)"
   )
+  yticks <- seq(0,ymax,5)
   if(by=="All_Games") ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=1)) + 
-    geom_line(size=2) + ylim(0,ymax)
+    geom_line(size=2) + #ylim(0,ymax) +
+    labs(x=labs$x, y=labs$y) +
+    scale_y_continuous(breaks=yticks, limits=c(0,ymax))
   
-  else ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + ylim(0,ymax) +
-    labs(color=by_label, x=labs$x, y=labs$y)
+  else ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + 
+    #ylim(0,ymax) +
+    labs(color=by_label, x=labs$x, y=labs$y) +
+    scale_y_continuous(breaks=yticks, limits=c(0,ymax))
   
 }
 
