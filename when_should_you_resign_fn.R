@@ -108,6 +108,34 @@ replace_mates_with_extreme_evaluations <- function(df)
 }
 
 
+# add increment indicator
+add_increment_indicator <- function(df)
+{
+  tc <- as.character(df$TimeControl)
+  inc <- unlist(lapply(strsplit(tc, "+", fixed=TRUE), function(l) l[2]>0))
+  df$Increment <- inc
+  print("Added variable Increment to df")
+  return(df)
+}
+
+# add inc*tc category
+add_increment_by_time_category_indicator <- function(df)
+{
+  "
+  need to have added increment indicator to df
+  "
+  inc_tc <- paste0(df$Category, df$Increment)
+  inc_tc <- gsub(pattern = "TRUE", replacement = "+inc", x=inc_tc)
+  inc_tc <- gsub(pattern = "FALSE", replacement = "", x=inc_tc)
+  inc_tc <- factor(inc_tc, 
+                   levels=c("Bullet", "Bullet+inc", "Blitz", "Blitz+inc", "Rapid", "Rapid+inc", "Classical", "Classical+inc"), 
+                   ordered = TRUE)
+  df$Category_Inc <- inc_tc
+  print("Added variable Category_Inc to df")
+  return(df)
+}
+
+
 
 #### worst evals ####
 # add worst eval for each player
@@ -264,7 +292,7 @@ get_plot_worst_white_eval_by <- function(df, by=NULL, exclude_time_forfeits=FALS
 #   
 # }
 
-get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, by_label=NULL, exclude_time_forfeits=FALSE, exclude_categories=NULL)
+get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, by_label=NULL, linetype=TRUE, exclude_time_forfeits=FALSE, exclude_categories=NULL)
 {
   # requested data filtering
   if(exclude_time_forfeits) df <- df[df$Termination != "Time forfeit",]
@@ -329,7 +357,7 @@ get_plot_disadvantage_reached_by <- function(df, results="1-0", by=NULL, by_labe
     scale_y_continuous(breaks=yticks, limits=c(0,ymax)) + 
     theme(text=element_text(size=15))
   
-  else ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket")) NULL else by), size=2) + 
+  else ggplot(dis_df, aes_string(x="Disadvantage_Reached", y="Percent_Winning", group=by, color=by)) + geom_line(aes_string(linetype=if(by %in% c("WhiteElo_bucket", "BlackElo_bucket") | !linetype) NULL else by), size=2) + 
     #ylim(0,ymax) +
     labs(color=by_label, linetype=by_label, x=labs$x, y=labs$y) +
     scale_y_continuous(breaks=yticks, limits=c(0,ymax)) + 

@@ -14,6 +14,8 @@ df <- restrict_by_rating(df, player = "White", min_rating=800, max_rating=2300)
 df <- restrict_by_rating(df, player = "Black", min_rating=800, max_rating=2300)
 df <- add_rating_buckets(df)
 df <- make_time_category_ordered(df)
+df <- add_increment_indicator(df)
+df <- add_increment_by_time_category_indicator(df)
 df <- replace_mates_with_extreme_evaluations(df)
 df <- add_worst_eval_for_each_player(df, eval_after_opponent_move_only=TRUE)
 breaks_preset <- 1
@@ -74,4 +76,9 @@ get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", by_label="Opponent\nR
 get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=TRUE)
 
 #
-get_plot_disadvantage_reached_by(df, results=c("1-0", "1/2-1/2"), by="BlackElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
+#get_plot_disadvantage_reached_by(df, results=c("1-0", "1/2-1/2"), by="BlackElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
+
+# added following comment on lichess
+# inc vs no inc
+get_plot_disadvantage_reached_by(df, by="Increment", by_label=NULL, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
+get_plot_disadvantage_reached_by(df, by="Category_Inc", by_label="Time Control\nand Increment", linetype=TRUE, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
