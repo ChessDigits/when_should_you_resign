@@ -6,7 +6,7 @@ When should you resign?
 pip
 "
 setcwd()
-df <- load_data(k_games=200)
+df <- load_data(k_games=200, use_local_file=FALSE)
 df <- remove_abnormal_termination(df)
 df <- remove_results(df, results="1/2-1/2")
 df <- restrict_by_rating_differential(df, max_diff=100)
@@ -42,4 +42,4 @@ get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", exclude_categories = 
 # inc vs no inc
 # https://lichess.org/forum/general-chess-discussion/when-should-you-resign--chance-of-winning-on-lichess-when-stockfish-says-youre-losing#8
 get_plot_disadvantage_reached_by(df, by="Increment", by_label=NULL, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
-get_plot_disadvantage_reached_by(df, by="Category_Inc", by_label="Time Control\nand Increment", linetype=TRUE, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
+get_plot_disadvantage_reached_by(df, by="Category_Inc", by_label="Time Control\nand Increment", linetype=F, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
