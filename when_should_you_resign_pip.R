@@ -21,46 +21,6 @@ df <- add_worst_eval_for_each_player(df, eval_after_opponent_move_only=TRUE)
 breaks_preset <- 1
 df <- add_worst_eval_bucket(df, breaks_preset = breaks_preset)
 
-# hist(df$worst_black_eval)
-# hist(df$worst_white_eval)
-# with(subset(df, worst_black_eval > 5), table(Result))
-# with(subset(df, worst_black_eval == WHITE_MATE_EVAL), table(Result))
-# t <- with(subset(df, worst_black_eval >= WHITE_MATE_EVAL), xtabs(~Category+Result))
-# plot(t)
-# 
-# .df <- subset(df, worst_white_eval <= -1)
-# ggplot(.df, aes(x=Category, fill=Result))+geom_bar(position = "fill")
-# 
-
-
-#### plots worst eval during game ####
-#### NOT FOR ARTICLE
-#### this asks the question what are my chances of winning if the max disadvantage in my game is __ 
-#### (instead of ONCE I REACH a disadv of __)
-exclude_time_forfeits <- FALSE
-get_plot_worst_white_eval_by(df, by=NULL, exclude_time_forfeits=exclude_time_forfeits)
-get_plot_worst_white_eval_by(df, by="Category", exclude_time_forfeits=exclude_time_forfeits)
-get_plot_worst_white_eval_by(df, by="WhiteElo_bucket", exclude_categories=list(NULL, "Bullet")[[2]], exclude_time_forfeits=exclude_time_forfeits)
-get_plot_worst_white_eval_by(df, by="BlackElo_bucket", exclude_categories=list(NULL, "Bullet")[[2]], exclude_time_forfeits=exclude_time_forfeits)
-
-# for the onion plot, can choose white or black rating bucket; exclude or include bullet; exclude or include time forfeits
-# (can also not exclude black players based on rating)
-
-# rating separate by time category
-#get_plot_worst_white_eval_by_rating_for_each_time_category(df, by="WhiteElo_bucket", exclude_time_forfeits = exclude_time_forfeits)
-
-
-# scatterplot worst evals
-ggplot(df[sample(x = 1:nrow(df), size = 20000, replace = FALSE),], 
-       aes(x=worst_white_eval, y=worst_black_eval)) + geom_point()
-
-# confusion matrix
-cm <- yardstick::conf_mat(data=df, truth=worst_white_eval_bucket, estimate=worst_black_eval_bucket)
-autoplot(cm, type="heatmap")
-
-
-
-
 
 #### disadvantage reached in game ####
 #### THIS ONE FOR ARTICLE ####
@@ -80,5 +40,6 @@ get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", exclude_categories = 
 
 # added following comment on lichess
 # inc vs no inc
+# https://lichess.org/forum/general-chess-discussion/when-should-you-resign--chance-of-winning-on-lichess-when-stockfish-says-youre-losing#8
 get_plot_disadvantage_reached_by(df, by="Increment", by_label=NULL, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
 get_plot_disadvantage_reached_by(df, by="Category_Inc", by_label="Time Control\nand Increment", linetype=TRUE, exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
