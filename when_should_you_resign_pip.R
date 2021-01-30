@@ -3,7 +3,9 @@
 Chess Digits
 When should you resign?
 
-pip
+Pipeline for article:
+https://web.chessdigits.com/articles/when-should-you-resign
+
 "
 setcwd()
 df <- load_data(k_games=200, use_local_file=FALSE)
@@ -37,6 +39,7 @@ get_plot_disadvantage_reached_by(df, by="BlackElo_bucket", exclude_categories = 
 
 #
 #get_plot_disadvantage_reached_by(df, results=c("1-0", "1/2-1/2"), by="BlackElo_bucket", exclude_categories = list(NULL, "Bullet")[[1]], exclude_time_forfeits=exclude_time_forfeits)
+
 
 # added following comment on lichess
 # inc vs no inc

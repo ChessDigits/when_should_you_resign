@@ -3,7 +3,9 @@
 Chess Digits
 When should you resign?
 
-fn
+Functions for article:
+https://web.chessdigits.com/articles/when-should-you-resign
+
 "
 
 #### imports ####
@@ -188,7 +190,7 @@ add_worst_eval_bucket <- function(df, breaks_preset=c(1,2,3,4))
   return(df)
 }
 
-# 
+# add max disadvantage reached in game
 add_disadvantage_reached_in_game <- function(df, breaks_preset)
 {
   "
@@ -242,9 +244,8 @@ restrict_by_rating <- function(df, player=c("White", "Black"), min_rating=900, m
   return(df)
 }
 
-# use rating diff aussi! already provided
-# oups ca cest le changement après coté
 
+# restrict by rating differential
 restrict_by_rating_differential <- function(df, max_diff)
 {
   n_pre <- nrow(df)
